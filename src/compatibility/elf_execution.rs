@@ -143,7 +143,7 @@ impl ImaSignatureVerifier {
         }
     }
 
-    /// Verifies cryptographic signatures of ELF executables before loading
+    /// Rejects signatures until a cryptographic verifier is implemented.
     pub fn verify_executable_signature(&self, binary_hash: &[u8], signature: &[u8]) -> bool {
         self.verification_count.fetch_add(1, Ordering::SeqCst);
 
@@ -151,9 +151,9 @@ impl ImaSignatureVerifier {
             return !self.strict_mode.load(Ordering::SeqCst); // Fails verification in strict mode
         }
 
-        // Simulates signature decryption and comparison using Dilithium-5
-        // If first byte of signature matches first byte of hash, accept simulation
-        signature[0] == binary_hash[0]
+        // A byte comparison is not signature verification. Fail closed until
+        // the configured algorithm and trusted public key are implemented.
+        false
     }
 }
 
@@ -210,10 +210,10 @@ mod tests {
     fn test_ima_signature_verification() {
         let verifier = ImaSignatureVerifier::new();
         let hash = [0xAA, 0xBB, 0xCC];
-        let valid_sig = [0xAA, 0x11, 0x22];
+        let matching_prefix_sig = [0xAA, 0x11, 0x22];
         let invalid_sig = [0xFF, 0x11, 0x22];
 
-        assert!(verifier.verify_executable_signature(&hash, &valid_sig));
+        assert!(!verifier.verify_executable_signature(&hash, &matching_prefix_sig));
         assert!(!verifier.verify_executable_signature(&hash, &invalid_sig));
     }
 }

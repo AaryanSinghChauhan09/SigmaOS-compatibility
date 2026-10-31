@@ -11,3 +11,9 @@ Use the Rust toolchain declared by the repository. Run cargo check and the avail
 ## Status
 
 This overview describes repository scope; it does not claim that every planned feature is implemented or production-ready.
+
+The IMA signature API rejects non-empty signatures because no cryptographic
+verifier or trusted public key is configured. Empty inputs are accepted only
+when strict mode is disabled. Do not treat this crate as an executable
+signature verification boundary until a real verifier is integrated and
+validated.
