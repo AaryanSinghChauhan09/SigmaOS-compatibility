@@ -11,7 +11,10 @@ keywords = ["compatibility", "translation", "layer"]
 categories = ["os"]
 
 [dependencies]
-sigmaos-kernel = { version = "0.1", path = "../SigmaOS-kernel" }
 
 [profile.release]
 opt-level = 3
+
+[lib]
+name = "sigmaos_compatibility"
+path = "src/lib.rs"
